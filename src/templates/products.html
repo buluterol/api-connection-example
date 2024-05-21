@@ -1,0 +1,27 @@
+<div class="table mt-3 products-table">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>{$LANG.prd_name}</th>
+                <th>{$LANG.stock}</th>
+                <th>{$LANG.price}</th>
+                <th>{$LANG.quantity}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $urunler as $urun}
+                <tr>
+                    <td>{$urun.name}</td>
+                    <td>{$urun.stock}</td>
+                    <td>{$urun.price}</td>
+                    <td>
+                        <input name="quantity" type="number" class="form-control" value="0" min="{$urun.min_order}"
+                            max="{$urun.max_order}" id="quantity_{$urun.id}" urunKodu="{$urun.id}">
+                    </td>
+                </tr>
+            {/foreach}
+        </tbody>
+    </table>
+    <input class="form-control" id="character" placeholder="Karakter adınızı yazınız.">
+    <button type="button" class="btn btn-primary" onclick="addProducts()" data-bs-toggle="modal" data-bs-target="#exampleModal">{$LANG.buy}</button>
+</div>

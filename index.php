@@ -5,3 +5,4 @@ require_once 'src/classes/Main.php';
 
 $main = new Main();
 $main->run();
+

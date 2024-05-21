@@ -1,6 +1,6 @@
 <?php
 
-require_once 'home.php';
+require_once 'Home.php';
 
 class Main
 {
@@ -10,7 +10,7 @@ class Main
     {
         global $lang, $smarty;
 
-        $lang = $_SESSION['lang'] ? $_SESSION['lang'] : 'tr';
+        $lang = isset($_SESSION['lang']) ? $_SESSION['lang'] : 'tr';
 
         if (isset($_GET['lang'])) {
             $lang = $_GET['lang'];
@@ -22,23 +22,44 @@ class Main
         $smarty = new Smarty\Smarty();
         $this->router = new \Bramus\Router\Router();
 
+        $smarty->clearAllCache();
+        $smarty->force_compile = true;
+        $smarty->clearCompiledTemplate();
+        $smarty->compile_check = true;
+        $smarty->caching = Smarty\Smarty::CACHING_OFF;
+
         $smarty->setTemplateDir('src/templates');
         $smarty->setCompileDir('/tmp');
-
         $smarty->assign('LANG', $lang);
         $smarty->assign('langs', ['tr' => 'Türkçe', 'en' => 'English']);
+        
     }
+
+    var $compile_check   =  true; 
 
     public function run()
     {
         global $smarty;
 
-        $this->router->get('/', function () {
+        $this->router->get('/', function () use ($smarty) {
             $home = new Home();
-            $home->index();
+
+            if(isset($_GET['route'])) {
+                if($_GET['route'] == "products") {
+                    $home->products();
+                }
+                if($_GET['route'] == "order") {
+                    $home->order();
+                }
+            } else {
+                $home->index();
+                $smarty->display('index.html');
+            }
+            
         });
 
+        
         $this->router->run();
-        $smarty->display('index.html');
+        
     }
 }
