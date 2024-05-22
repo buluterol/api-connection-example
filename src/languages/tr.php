@@ -12,5 +12,10 @@ $lang = [
     'max_order' => 'Max. Sipariş',
     'quantity' => 'Miktar',
     'price' => 'Fiyat',
+    'loading' => 'İşleniyor...',
     'buy' => 'Satın Al',
+    'type_charname' => 'Karakterinizin adını yazınız.',
+    'order_received' => 'Sipariş Alındı.',
+    'okay'  => 'Tamam',
+    'close' => 'Kapat'
 ];

@@ -66,7 +66,7 @@ class Home
                     <cmd>epinUrunleri</cmd>
                     <username>api@turkpin.net</username>
                     <password>@.nwjExrK4U5b_S@y</password>
-                    <oyunKodu>1</oyunKodu>
+                    <oyunKodu>" . $_GET['oyun'] . "</oyunKodu>
                 </params>
             </APIRequest>")
         ));
@@ -79,10 +79,14 @@ class Home
 
         $urunler = array();
 
-        
-        foreach($array['params']['epinUrunListesi']['urun'] as $urun) {
-            $urunler[$urun['id']] = $urun;
+        if(isset($array['params']['epinUrunListesi']['urun'][0])) {
+            foreach($array['params']['epinUrunListesi']['urun'] as $urun) {
+                $urunler[$urun['id']] = $urun;
+            }
+        } else {
+            $urunler[$array['params']['epinUrunListesi']['urun']['id']] = $array['params']['epinUrunListesi']['urun'];
         }
+
         
 
 
@@ -94,8 +98,7 @@ class Home
     public function order()
     {
         global $smarty;
-        //print_r($_POST);
-        /*
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://www.turkpin.net/api.php',
@@ -112,10 +115,10 @@ class Home
                     <cmd>epinSiparisYarat</cmd>
                     <username>api@turkpin.net</username>
                     <password>@.nwjExrK4U5b_S@y</password>
-                    <oyunKodu>" . $_POST['oyunKodu'] ."</oyunKodu>
-                    <urunKodu>" . $_POST['urunKodu'] ."</urunKodu>
-                    <adet>" . $_POST['adet'] ."</adet>
-                    <character>" . $_POST['character'] ."</character>
+                    <oyunKodu>" . $_GET['oyunKodu'] ."</oyunKodu>
+                    <urunKodu>" . $_GET['urunKodu'] ."</urunKodu>
+                    <adet>" . $_GET['adet'] ."</adet>
+                    <character>" . $_GET['character'] ."</character>
                 </params>
             </APIRequest>")
         ));
@@ -126,32 +129,26 @@ class Home
         $array = json_decode($json, TRUE);
         curl_close($curl);
 
-        $order = array();
-
+        $siparis = array();
         
-        foreach($array['params']['epin_list']['epin'] as $epin) {
-            $order[] = array(
-                'code' => $epin['code'], 
-                'desc' => $epin['desc']
+        if(isset($array['params']['epin_list']['epin'][0])){
+            foreach($array['params']['epin_list']['epin'] as $epin) {
+                $siparis[] = array(
+                    'code' => $epin['code'], 
+                    'desc' => $epin['desc']
+                );
+            }
+        } else {
+            $siparis[] = array(
+                'code' => $array['params']['epin_list']['epin']['code'], 
+                'desc' => $array['params']['epin_list']['epin']['desc']
             );
         }
         
+        
 
 
-        $smarty->assign('order', $order);
-        */
-
-        $input = file_get_contents('php://input');
-        $data = json_decode($input, true);
-
-        if (json_last_error() === JSON_ERROR_NONE) {
-            
-            echo json_encode(["status" => "success", "message" => "Veri başarıyla alındı."]);
-        } else {
-            echo json_encode(["status" => "error", "message" => "Geçersiz JSON verisi."]);
-        }
-
-
+        $smarty->assign('siparis', $siparis);
         $smarty->display('order.html');
     }
 }

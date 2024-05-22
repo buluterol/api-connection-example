@@ -1,1 +1,7 @@
-<h1>LOLOLO</h1>
+{foreach $siparis as $epin}
+<div class="siparis-status">
+    <b>Pin:</b><br>
+    <h3>{$epin.code}</h3>
+    <p>Açıklama: {$epin.code}</p>
+</div>
+{/foreach}
